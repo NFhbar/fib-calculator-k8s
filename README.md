@@ -43,6 +43,9 @@ Postgres password:
 $ kubectl create secret generic pgpassword --from-literal PGPASSWORD=value
 ```
 
+## CI/CD
+App is deployed via Travis CI to Google Cloud. 
+
 ## Issues
 If `kubectl` times out, restart minikube:
 ```bash

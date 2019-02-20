@@ -5,3 +5,6 @@ worker/node_modules
 
 # env
 .env
+
+# google cloud
+fib-calculator-k8s-ff8c034e3574.json
