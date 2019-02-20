@@ -1,4 +1,7 @@
 # Fibonacci Calculator K8s
+
+[![Build Status](https://travis-ci.org/NFhbar/fib-calculator-k8s.svg?branch=master)](https://travis-ci.org/NFhbar/fib-calculator-k8s)
+
 Kubernetes version of [Fibonacci Calculator](https://github.com/NFhbar/fib-calculator).
 
 The app's architecture:
