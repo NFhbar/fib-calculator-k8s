@@ -8,6 +8,7 @@ The app's architecture:
 
 ![Alt text](docs/k8s.png?raw=true "architecture")
 
+## Local Development
 Start `minikube`:
 ```bash
 $ minikube start
@@ -43,8 +44,44 @@ Postgres password:
 $ kubectl create secret generic pgpassword --from-literal PGPASSWORD=value
 ```
 
-## CI/CD
-App is deployed via Travis CI to Google Cloud. 
+## Production
+App is deployed via Travis CI to Google Cloud, see [deploy.sh](./deploy.sh) and [.travis.yml](./.travis.yml). After setting up your Kubernetes cluster.
+
+To apply secret to cluster in Google Cloud; in Google Cloud cluster shell - only on first deploy:
+```bash
+$ gcloud config set project PROJECT_ID
+$ gcloud config set compute/zone PROJECT_ZONE
+$ gcloud container cluster get-credentials PROJECT_NAME
+$ kubectl create secret generic pgpassword --from-literal PGPASSWORD=value
+```
+
+To use Nginx in Google Cloud using [Helm](https://docs.helm.sh/using_helm/#from-script):
+
+First get Helm; in Google Cloud cluster shell - only on first deploy:
+```bash
+$ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh
+$ chmod 700 get_helm.sh
+$ ./get_helm.sh
+```
+
+Create services accounts and cluster role binding; in Google Cloud cluster shell - only on first deploy:
+```bash
+$ kubectl create serviceaccount --namespace kube-system tiller
+$ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+```
+
+Initialize Helm; in Google Cloud cluster shell - only on first deploy:
+```bash
+$ helm init --service-account tiller --upgrade 
+```
+
+Install Nginx:
+```bash
+$ helm install stable/nginx-ingress --name my-nginx --set rbac.create=true
+```
+
+
+
 
 ## Issues
 If `kubectl` times out, restart minikube:
